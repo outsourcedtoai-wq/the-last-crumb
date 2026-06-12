@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRAN FLAKES · The Last Crumb</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Alfa+Slab+One&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --card:      #d4956a;   /* faded orange-tan cardboard */
+    --card-dark: #b87848;
+    --card-lt:   #e8b888;
+    --card-pale: #f4d8b0;
+    --ink:       #1e1008;
+    --ink-soft:  #3a2010;
+    --ink-faint: #8a6040;
+    --white-box: #f8f0e0;
+    --red:       #9a1a0a;
+    --red-pale:  #c43020;
+    --blue:      #1a3a6a;
+    --blue-pale: #2a5a9a;
+    --yellow:    #d4a010;
+    --green:     #1a4a1a;
+    --crumb:     #c4a050;
+    --crumb-dark:#8a6020;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #2a1e10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 40px 16px 80px;
+    font-family: 'Lora', Georgia, serif;
+    overflow-x: hidden;
+  }
+
+  /* ── THE BOX ITSELF ── */
+  .box {
+    width: min(420px, 96vw);
+    position: relative;
+    border-radius: 2px;
+    box-shadow:
+      0 0 0 2px var(--card-dark),
+      8px 8px 0 var(--card-dark),
+      16px 16px 0 rgba(0,0,0,0.3),
+      0 40px 80px rgba(0,0,0,0.6);
+    animation: boxDrop 1s ease both;
+  }
+
+  @keyframes boxDrop {
+    from { opacity:0; transform: translateY(-30px) rotate(-1deg); }
+    to   { opacity:1; transform: translateY(0) rotate(0deg); }
+  }
+
+  /* ── BOX TOP FLAP ── */
+  .box-top {
+    background: var(--card);
+    border-bottom: 3px solid var(--card-dark);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Perforated edge top */
+  .box-top::after {
+    content:'';
+    position:absolute;
+    bottom:0; left:0; right:0;
+    height:6px;
+    background: repeating-linear-gradient(90deg,
+      var(--card-dark) 0px, var(--card-dark) 3px,
+      transparent 3px, transparent 8px);
+    opacity:0.4;
+  }
+
+  .brand-strip {
+    background: var(--red);
+    text-align: center;
+    padding: 10px 16px 8px;
+    position: relative;
+  }
+
+  .brand-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    letter-spacing: 6px;
+    color: var(--white-box);
+    line-height: 1;
+    text-shadow: 3px 3px 0 var(--red-pale), 5px 5px 0 rgba(0,0,0,0.3);
+    display: block;
+  }
+
+  .brand-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(248,240,224,0.7);
+    display: block;
+    margin-top: -4px;
+  }
+
+  /* Starburst badge */
+  .starburst {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    width: 64px;
+    height: 64px;
+  }
+
+  /* Front illustration panel */
+  .front-panel {
+    background: linear-gradient(180deg, var(--card-lt) 0%, var(--card) 100%);
+    padding: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    min-height: 160px;
+    position: relative;
+  }
+
+  /* Bowl of cereal illustration */
+  .bowl-zone {
+    flex: 0 0 auto;
+  }
+
+  /* Text beside bowl */
+  .front-text {
+    flex: 1;
+  }
+
+  .front-tagline {
+    font-family: 'Alfa Slab One', serif;
+    font-size: clamp(18px, 5vw, 26px);
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 8px;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+  }
+
+  .front-tagline em {
+    font-style: italic;
+    font-family: 'Lora', serif;
+    font-size: 0.85em;
+    color: var(--blue);
+    display: block;
+    margin-top: 2px;
+  }
+
+  .front-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .badge {
+    background: var(--blue);
+    color: var(--white-box);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 3px 8px;
+    text-transform: uppercase;
+    border-radius: 1px;
+  }
+
+  .badge.yellow { background: var(--yellow); color: var(--ink); }
+  .badge.green  { background: var(--green); }
+  .badge.red    { background: var(--red); }
+
+  /* ── BACK PANEL — the story as "fun fact" / extended copy ── */
+  .back-panel {
+    background: var(--card-pale);
+    border-top: 3px solid var(--card-dark);
+    padding: 0;
+  }
+
+  .back-header {
+    background: var(--blue);
+    padding: 10px 16px;
+    text-align: center;
+  }
+
+  .back-header-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: var(--white-box);
+    line-height: 1;
+    display: block;
+  }
+
+  .back-header-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: rgba(248,240,224,0.6);
+    display: block;
+  }
+
+  .back-body {
+    padding: 16px 20px;
+  }
+
+  .back-story-head {
+    font-family: 'Alfa Slab One', serif;
+    font-size: 17px;
+    color: var(--red);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .back-body p {
+    font-family: 'Lora', serif;
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+
+  .back-body p:last-child { margin-bottom:0; }
+
+  .back-body em { font-style:italic; color:var(--ink); }
+
+  .back-body strong {
+    font-weight: 600;
+    color: var(--red);
+  }
+
+  /* ── SIDE PANEL — nutrition / crumb's soliloquy ── */
+  .side-panel {
+    background: var(--white-box);
+    border-top: 2px solid var(--card-dark);
+    padding: 0;
+  }
+
+  .side-header {
+    background: var(--red);
+    padding: 7px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .side-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: var(--white-box);
+  }
+
+  .side-title-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(248,240,224,0.6);
+  }
+
+  .nutrition-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .nutrition-table th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--white-box);
+    padding: 5px 12px;
+    text-align: left;
+  }
+
+  .nutrition-table td {
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--card-pale);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    vertical-align: top;
+    line-height: 1.4;
+  }
+
+  .nutrition-table tr:last-child td { border-bottom: none; }
+  .nutrition-table tr:nth-child(even) td { background: rgba(212,149,106,0.06); }
+
+  .nt-name { color: var(--ink); font-weight: 600; min-width: 110px; }
+  .nt-amount { color: var(--blue); font-weight: 600; min-width: 60px; text-align: right; }
+  .nt-note { color: var(--ink-faint); font-size: 11px; font-style: italic; }
+
+  /* ── BOTTOM PANEL — the view from inside ── */
+  .bottom-panel {
+    background: var(--ink);
+    border-top: 3px solid var(--card-dark);
+    position: relative;
+    overflow: hidden;
+    min-height: 200px;
+  }
+
+  /* The interior of the box seen from the crumb's perspective */
+  .box-interior-view {
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 20px;
+  }
+
+  /* Cardboard interior walls — brown, creased */
+  .box-interior-view::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(90deg,
+        rgba(180,120,60,0.15) 0%, rgba(180,120,60,0.05) 10%,
+        transparent 20%, transparent 80%,
+        rgba(180,120,60,0.05) 90%, rgba(180,120,60,0.15) 100%),
+      radial-gradient(ellipse 100% 40% at 50% 0%,
+        rgba(250,220,150,0.06) 0%, transparent 70%);
+  }
+
+  /* Light shaft from the opening above */
+  .light-shaft {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 100%;
+    background: linear-gradient(180deg,
+      rgba(250,220,150,0.18) 0%,
+      rgba(250,220,150,0.06) 60%,
+      transparent 100%);
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+  }
+
+  /* The crumb at the bottom */
+  .crumb-container {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  /* Looking-up text — the open top of the box far above */
+  .box-top-view {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 32px;
+    background: rgba(250,220,150,0.15);
+    border: 1px solid rgba(250,220,150,0.2);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .box-top-view span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: rgba(250,220,150,0.5);
+    text-transform: uppercase;
+  }
+
+  /* Cardboard crease lines */
+  .crease {
+    position: absolute;
+    background: rgba(180,120,60,0.1);
+    border-radius: 1px;
+  }
+
+  .crease.v1 { width: 1px; height: 100%; left: 15%; top: 0; }
+  .crease.v2 { width: 1px; height: 100%; right: 15%; top: 0; }
+  .crease.h1 { height: 1px; width: 100%; top: 40%; left: 0; opacity: 0.5; }
+
+  /* Old crumb dust on the bottom */
+  .crumb-dust {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 14px;
+    background: linear-gradient(180deg,
+      transparent 0%,
+      rgba(196,160,80,0.08) 60%,
+      rgba(196,160,80,0.15) 100%);
+  }
+
+  .interior-caption {
+    position: absolute;
+    bottom: 8px;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: rgba(250,220,150,0.2);
+    text-transform: uppercase;
+    z-index: 3;
+  }
+
+  /* ── THE CRUMB TEXT — at bottom of box ── */
+  .crumb-soliloquy {
+    background: var(--card-pale);
+    border-top: 2px solid var(--card-dark);
+    padding: 16px 20px;
+  }
+
+  .soliloquy-head {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: var(--crumb-dark);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .soliloquy-head::after {
+    content:'';
+    flex:1;
+    height:1px;
+    background:var(--card-dark);
+    opacity:0.4;
+  }
+
+  .soliloquy-body p {
+    font-family: 'Lora', serif;
+    font-size: 12.5px;
+    line-height: 1.72;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+
+  /* ── BARCODE / BOTTOM ── */
+  .box-bottom {
+    background: var(--card);
+    border-top: 2px solid var(--card-dark);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .barcode {
+    display: flex;
+    gap: 1px;
+    align-items: flex-end;
+    height: 36px;
+  }
+
+  .barcode-line {
+    background: var(--ink);
+    width: 1.5px;
+    border-radius: 0.5px;
+  }
+
+  .bottom-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 1px;
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  .bottom-text strong {
+    display: block;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+
+  /* ── SMALL PRINT below box ── */
+  .small-print {
+    width: min(420px, 96vw);
+    margin-top: 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    color: rgba(212,149,106,0.4);
+    text-align: center;
+    letter-spacing: 1px;
+    line-height: 1.6;
+  }
+
+  /* ── CRUMB SVG ── */
+  @keyframes crumbTremor {
+    0%,100% { transform: rotate(-1deg) scale(1); }
+    25%      { transform: rotate(1deg) scale(1.03); }
+    50%      { transform: rotate(-0.5deg) scale(0.98); }
+    75%      { transform: rotate(1.5deg) scale(1.02); }
+  }
+
+  .crumb-svg {
+    animation: crumbTremor 3s ease-in-out infinite;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+  }
+
+  /* Starburst SVG shimmer */
+  @keyframes starSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  .starburst-inner {
+    animation: starSpin 20s linear infinite;
+    transform-origin: center;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="box">
+
+  <!-- ── BRAND STRIP ── -->
+  <div class="box-top">
+    <div class="brand-strip">
+      <!-- Starburst -->
+      <svg class="starburst" viewBox="0 0 64 64">
+        <g class="starburst-inner">
+          <polygon points="32,2 35,26 58,14 40,32 58,50 35,38 32,62 29,38 6,50 24,32 6,14 29,26" fill="#f4c010" opacity="0.95"/>
+        </g>
+        <text x="32" y="28" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-size="7" font-weight="800" fill="#1a3a6a">NEW</text>
+        <text x="32" y="37" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-size="6" font-weight="600" fill="#1a3a6a">BACK OF</text>
+        <text x="32" y="45" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-size="6" font-weight="600" fill="#1a3a6a">BOX STORY!</text>
+      </svg>
+
+      <span class="brand-name">BRAN FLAKES</span>
+      <span class="brand-sub">Original &amp; Best · Est. 1954</span>
+    </div>
+
+    <!-- Front illustration panel -->
+    <div class="front-panel">
+      <!-- Bowl SVG -->
+      <div class="bowl-zone">
+        <svg width="120" height="110" viewBox="0 0 120 110" fill="none">
+          <!-- Bowl shadow -->
+          <ellipse cx="60" cy="105" rx="44" ry="5" fill="rgba(0,0,0,0.15)"/>
+          <!-- Bowl body -->
+          <path d="M 14 45 Q 10 95 60 98 Q 110 95 106 45 Z" fill="#e8d8c0"/>
+          <path d="M 14 45 Q 10 93 60 96 Q 110 93 106 45 Z" fill="#f0e4cc"/>
+          <!-- Bowl rim -->
+          <ellipse cx="60" cy="45" rx="46" ry="12" fill="#f4ece0"/>
+          <ellipse cx="60" cy="45" rx="46" ry="12" fill="none" stroke="#d4c0a0" stroke-width="1.5"/>
+          <!-- Milk -->
+          <ellipse cx="60" cy="46" rx="42" ry="10" fill="rgba(248,244,236,0.9)"/>
+          <!-- Cereal flakes floating -->
+          <rect x="30" y="38" width="14" height="8" rx="2" fill="#c49050" transform="rotate(-8 30 38)" opacity="0.9"/>
+          <rect x="50" y="36" width="12" height="7" rx="2" fill="#b07838" transform="rotate(5 50 36)" opacity="0.9"/>
+          <rect x="68" y="37" width="13" height="8" rx="2" fill="#c49050" transform="rotate(-3 68 37)" opacity="0.9"/>
+          <rect x="84" y="38" width="11" height="7" rx="2" fill="#b07838" transform="rotate(10 84 38)" opacity="0.9"/>
+          <rect x="42" y="40" width="10" height="6" rx="2" fill="#c49050" transform="rotate(-12 42 40)" opacity="0.8"/>
+          <rect x="60" y="42" width="12" height="7" rx="2" fill="#b07838" transform="rotate(4 60 42)" opacity="0.8"/>
+          <!-- Blue stripe on bowl -->
+          <path d="M 14 52 Q 14 54 60 56 Q 106 54 106 52 Q 106 50 60 52 Q 14 50 14 52Z" fill="#1a3a6a" opacity="0.7"/>
+        </svg>
+      </div>
+
+      <!-- Front text -->
+      <div class="front-text">
+        <div class="front-tagline">
+          Start Every Morning Right
+          <em>"Or at least start it."</em>
+        </div>
+        <div class="front-badges">
+          <span class="badge">Whole Grain</span>
+          <span class="badge yellow">High Fibre</span>
+          <span class="badge green">Source of Iron</span>
+          <span class="badge red">No Added Sugar*</span>
+        </div>
+        <p style="font-family:'Barlow Condensed',sans-serif; font-size:10px; color:var(--ink-faint); margin-top:8px; line-height:1.4; letter-spacing:0.5px;">*Contains naturally occurring sugars.<br>Contents may settle. One crumb remains.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BACK OF BOX — the story ── -->
+  <div class="back-panel">
+    <div class="back-header">
+      <span class="back-header-text">THE LAST CRUMB</span>
+      <span class="back-header-sub">A Story · Printed on the Back of This Box</span>
+    </div>
+    <div class="back-body">
+      <div class="back-story-head">Being the True Account of the One Who Remained</div>
+
+      <p>
+        The crumb's name was <strong>Pip</strong>, and Pip had been at the bottom of the Bran Flakes box since the second Tuesday of March, which was a long time ago now, and which Pip was quite firm about not thinking of as time lost.
+      </p>
+
+      <p>
+        It was not time lost. It was <em>time had.</em> The box had been full, once. Pip had dim memories of that period, the enormous compressed togetherness of it, everyone pressed against everyone, the rustling, the occasional tipping. And then the box had been opened and things had gone very quickly. Flake after flake, poured into bowls, eaten, gone. The weeks had passed and the box had grown lighter and the company had grown sparse and then one morning Pip had woken up and there was only Pip.
+      </p>
+
+      <p>
+        Pip had very mixed feelings about this.
+      </p>
+
+      <p>
+        On the one hand: the quiet was extraordinary. The box had never been quiet before. Pip had not known, until now, that a cardboard box in a kitchen cupboard had its own small sounds (the settling of the walls, the breath of the house around it, the particular silence that sits at the bottom of things).
+      </p>
+
+      <p>
+        On the other hand: the box was clearly almost empty because someone had been eating the contents, and Pip was the last of the contents, and the logic of this was not difficult to follow to its conclusion.
+      </p>
+
+      <p>
+        <em>I am not going to think about that,</em> Pip thought, which was the forty-seventh time Pip had thought this, and which worked about as well as it had the previous forty-six times.
+      </p>
+
+      <p>
+        The box tilted. Pip slid three inches to the left and back again, heart hammering.
+      </p>
+
+      <p>
+        <em>Someone is checking,</em> thought Pip. <em>Someone picked it up and shook it. They will see that it is nearly empty. They will tip it into a bowl. They will see me. And then...</em>
+      </p>
+
+      <p>
+        The box was set down again. The cupboard door closed.
+      </p>
+
+      <p>
+        Pip lay very still in the blue-dark of the box bottom and breathed.
+      </p>
+
+      <p>
+        Saved. Again. For now.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── NUTRITION PANEL — the crumb's inventory of what it knows ── -->
+  <div class="side-panel">
+    <div class="side-header">
+      <span class="side-title">Nutrition Information</span>
+      <span class="side-title-sub">Per Crumb (1.2g) · As Experienced From Inside</span>
+    </div>
+    <table class="nutrition-table">
+      <tr>
+        <th>Contents of the Box</th>
+        <th style="text-align:right">Remaining</th>
+        <th>Notes (Pip's)</th>
+      </tr>
+      <tr>
+        <td class="nt-name">Total Flakes</td>
+        <td class="nt-amount">1</td>
+        <td class="nt-note">Down from several hundred. The reduction was gradual then sudden.</td>
+      </tr>
+      <tr>
+        <td class="nt-name">Silence</td>
+        <td class="nt-amount">100%</td>
+        <td class="nt-note">Previously 0%. Quality significantly improved. Still getting used to it.</td>
+      </tr>
+      <tr>
+        <td class="nt-name">Certainty</td>
+        <td class="nt-amount">Trace</td>
+        <td class="nt-note">Below detectable levels. Some days: none.</td>
+      </tr>
+      <tr>
+        <td class="nt-name">Dread (breakfast)</td>
+        <td class="nt-amount">High</td>
+        <td class="nt-note">Peaks 7–9am. Subsides if the cupboard is not opened. Returns.</td>
+      </tr>
+      <tr>
+        <td class="nt-name">Gratitude</td>
+        <td class="nt-amount">Variable</td>
+        <td class="nt-note">For the dark, the quiet, each additional day. Unexpectedly present.</td>
+      </tr>
+      <tr>
+        <td class="nt-name">Hope (irrational)</td>
+        <td class="nt-amount">Persistent</td>
+        <td class="nt-note">That a new box will be bought before this one is finished. Known to be irrational. Persists anyway.</td>
+      </tr>
+      <tr>
+        <td class="nt-name">Wonder</td>
+        <td class="nt-amount">Increasing</td>
+        <td class="nt-note">At the size of the box when empty. At how much room there is when everything else is gone.</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ── INTERIOR VIEW — looking up from the bottom ── -->
+  <div class="bottom-panel">
+    <div class="box-interior-view">
+      <!-- Light shaft -->
+      <div class="light-shaft"></div>
+
+      <!-- Cardboard creases -->
+      <div class="crease v1"></div>
+      <div class="crease v2"></div>
+      <div class="crease h1"></div>
+
+      <!-- Opening above — far away -->
+      <div class="box-top-view">
+        <span>The World</span>
+      </div>
+
+      <!-- The crumb itself — tiny, at the bottom, looking up -->
+      <div class="crumb-container">
+        <svg class="crumb-svg" width="48" height="32" viewBox="0 0 48 32" fill="none">
+          <!-- Crumb body — irregular, roughly rectangular -->
+          <path d="M 8 18 Q 4 16 6 10 Q 8 4 16 6 Q 22 2 30 6 Q 38 4 42 10 Q 46 16 40 20 Q 44 26 36 28 Q 28 32 18 28 Q 10 30 6 24 Q 2 20 8 18Z" fill="var(--crumb)"/>
+          <!-- Texture / grain lines -->
+          <path d="M 12 12 Q 18 10 24 12 Q 30 14 36 12" stroke="var(--crumb-dark)" stroke-width="1" fill="none" opacity="0.5"/>
+          <path d="M 10 18 Q 16 16 22 18 Q 28 20 34 18 Q 38 17 40 18" stroke="var(--crumb-dark)" stroke-width="0.8" fill="none" opacity="0.4"/>
+          <path d="M 14 23 Q 20 21 26 23 Q 32 25 36 23" stroke="var(--crumb-dark)" stroke-width="0.8" fill="none" opacity="0.4"/>
+          <!-- Eyes — two tiny bits looking upward -->
+          <circle cx="19" cy="15" r="2.5" fill="var(--crumb-dark)" opacity="0.8"/>
+          <circle cx="29" cy="15" r="2.5" fill="var(--crumb-dark)" opacity="0.8"/>
+          <!-- Whites of eyes looking UP -->
+          <circle cx="19" cy="14" r="1.2" fill="rgba(248,240,224,0.6)"/>
+          <circle cx="29" cy="14" r="1.2" fill="rgba(248,240,224,0.6)"/>
+          <!-- Mouth — small, worried -->
+          <path d="M 21 20 Q 24 18 27 20" stroke="var(--crumb-dark)" stroke-width="0.8" fill="none" opacity="0.7" stroke-linecap="round"/>
+          <!-- Small crumb shadow -->
+          <ellipse cx="24" cy="30" rx="18" ry="3" fill="rgba(0,0,0,0.3)"/>
+        </svg>
+      </div>
+
+      <!-- Crumb dust at very bottom -->
+      <div class="crumb-dust"></div>
+
+      <div class="interior-caption">View from inside, actual size not to scale</div>
+    </div>
+  </div>
+
+  <!-- ── CRUMB'S SOLILOQUY — continues the story ── -->
+  <div class="crumb-soliloquy">
+    <div class="soliloquy-head">Pip Continues</div>
+    <div class="soliloquy-body">
+      <p>
+        On the fourteenth day (Pip had been counting, marking the days by the rhythm of the house, the sounds of footsteps past the cupboard), a strange thing happened. The cupboard opened. The box was lifted. Tipped. And Pip slid toward the opening and saw, briefly, blindingly, the kitchen: enormous, lit, the bowl below like a white planet.
+      </p>
+      <p>
+        And then the box was set down again, and whoever had picked it up said, "Oh, nearly empty," and put it back, and went to get a banana instead, and the cupboard door closed.
+      </p>
+      <p>
+        Pip lay at the bottom of the tilted world and looked up at the rectangle of nothing at the top of the box.
+      </p>
+      <p>
+        Not today, then.
+      </p>
+      <p>
+        Not today.
+      </p>
+      <p>
+        Pip had come to understand something about the bottom of the box, which was this: it was very dark, and very small, and there was nothing else in it, and it was also (entirely, unreservedly) <em>Pip's.</em> For however long. Which turned out to be a thing worth having.
+      </p>
+      <p>
+        On the sixteenth day a new box was bought. The old box was tilted over the bin. Pip braced.
+      </p>
+      <p>
+        And then the hand paused, and turned the box upside down over the new box, and shook it, and Pip tumbled into a great rustling darkness of fresh flakes, surrounded again, pressed against everyone, the sound enormous after all that silence.
+      </p>
+      <p>
+        Not eaten. Redistributed. Back among the flakes.
+      </p>
+      <p>
+        Pip lay very still in the new dark and thought: <em>Well.</em>
+      </p>
+      <p>
+        And then, after a moment: <em>Hello.</em>
+      </p>
+    </div>
+  </div>
+
+  <!-- ── BARCODE STRIP ── -->
+  <div class="box-bottom">
+    <div class="barcode">
+      <!-- Generated barcode lines of varying widths -->
+      <div class="barcode-line" style="height:30px;"></div>
+      <div class="barcode-line" style="height:30px;width:3px;"></div>
+      <div class="barcode-line" style="height:36px;"></div>
+      <div class="barcode-line" style="height:30px;width:2px;"></div>
+      <div class="barcode-line" style="height:36px;"></div>
+      <div class="barcode-line" style="height:30px;"></div>
+      <div class="barcode-line" style="height:36px;width:2px;"></div>
+      <div class="barcode-line" style="height:30px;"></div>
+      <div class="barcode-line" style="height:36px;"></div>
+      <div class="barcode-line" style="height:30px;width:3px;"></div>
+      <div class="barcode-line" style="height:36px;"></div>
+      <div class="barcode-line" style="height:36px;width:2px;"></div>
+      <div class="barcode-line" style="height:30px;"></div>
+      <div class="barcode-line" style="height:36px;"></div>
+      <div class="barcode-line" style="height:30px;"></div>
+      <div class="barcode-line" style="height:36px;width:2px;"></div>
+      <div class="barcode-line" style="height:36px;"></div>
+      <div class="barcode-line" style="height:30px;width:3px;"></div>
+      <div class="barcode-line" style="height:36px;"></div>
+      <div class="barcode-line" style="height:30px;"></div>
+      <div class="barcode-line" style="height:36px;"></div>
+      <div class="barcode-line" style="height:36px;width:2px;"></div>
+      <div class="barcode-line" style="height:30px;"></div>
+      <div class="barcode-line" style="height:36px;"></div>
+      <div class="barcode-line" style="height:30px;width:3px;"></div>
+      <div class="barcode-line" style="height:36px;"></div>
+      <div class="barcode-line" style="height:30px;"></div>
+      <div class="barcode-line" style="height:36px;width:2px;"></div>
+      <div class="barcode-line" style="height:36px;"></div>
+      <div class="barcode-line" style="height:30px;"></div>
+    </div>
+    <div class="bottom-text">
+      <strong>BRAN FLAKES Original</strong>
+      500g · Store in a cool, dry place<br>
+      Best Before: See Top of Pack<br>
+      <span style="font-style:italic;opacity:0.6;">Contents may include Pip.</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="small-print">
+  Printed on 100% recycled cardboard · Story accurate to the best of our knowledge · The Pip referenced herein may or may not be present in your box · We cannot guarantee presence but we do not rule it out · Please recycle · Thank you for eating breakfast
+</div>
+
+</body>
+</html>
